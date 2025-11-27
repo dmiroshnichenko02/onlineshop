@@ -1,5 +1,6 @@
 package com.shop.menu.impl;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.shop.configs.ApplicationContext;
@@ -71,7 +72,7 @@ public class ProductCatalogMenu implements Menu {
     }
 
     private void printProductsToConsole() {
-        Product[] products = productManagementService.getProducts();
+        List<Product> products = productManagementService.getProducts();
         for (Product product : products) {
             System.out.println(product);
         }

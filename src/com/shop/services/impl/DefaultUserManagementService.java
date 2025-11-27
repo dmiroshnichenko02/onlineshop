@@ -1,6 +1,8 @@
 package com.shop.services.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import com.shop.enteties.Order;
@@ -17,11 +19,10 @@ public class DefaultUserManagementService implements UserManagementService {
 
     private static DefaultUserManagementService instance;
 
-    private User[] users;
-    private int lastUserIndex;
+    private List<User> users;
 
     {
-        users = new User[DEFAULT_USERS_CAPACITY];
+        users = new ArrayList<>(DEFAULT_USERS_CAPACITY);
     }
 
     private DefaultUserManagementService() {
@@ -38,11 +39,7 @@ public class DefaultUserManagementService implements UserManagementService {
             return errorMessage;
         }
 
-        if (users.length <= lastUserIndex) {
-            users = Arrays.copyOf(users, users.length << 1);
-        }
-
-        users[lastUserIndex++] = user;
+        users.add(user);
         return NO_ERROR_MESSAGE;
     }
 
@@ -69,20 +66,13 @@ public class DefaultUserManagementService implements UserManagementService {
 
 
     @Override
-    public User[] getUsers() {
-        int nonNullUsersAmount = 0;
+    public List<User> getUsers() {
+
+        List<User> nonNullUsers = new ArrayList<>();
+
         for (User user : users) {
             if (user != null) {
-                nonNullUsersAmount++;
-            }
-        }
-
-        User[] nonNullUsers = new User[nonNullUsersAmount];
-
-        int index = 0;
-        for (User user : users) {
-            if (user != null) {
-                nonNullUsers[index++] = user;
+                nonNullUsers.add(user);
             }
         }
 
@@ -100,7 +90,6 @@ public class DefaultUserManagementService implements UserManagementService {
     }
 
     void clearServiceState() {
-        lastUserIndex = 0;
-        users = new User[DEFAULT_USERS_CAPACITY];
+        users.clear();
     }
 }
